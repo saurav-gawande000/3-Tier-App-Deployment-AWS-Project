@@ -9,7 +9,7 @@ Web Tier (Presentation Layer): NGINX servers
 Application Tier (Business Logic Layer): Node.js servers
 
 Database Tier (Data Layer): MySQL RDS instance
-#1. VPC Setup
+# 1. VPC Setup
    --
    
     Create VPC with CIDR 192.168.0.0/16
@@ -128,7 +128,7 @@ pm2 startup
 2.Add HTTPS listener to external ALB with ACM certificate
 
  # 11. Auto Scaling Setup
-    ---
+    
 1.Create AMIs of your App and Web servers
 2.Create Launch Templates for both tiers
 3.Configure Auto Scaling Groups:
@@ -137,18 +137,18 @@ pm2 startup
 *  Web-ASG: 2-6 instances across Public1/Public2
 
 #  12. Route53 Configuration
-      ---
+      
 Create DNS record (boom.reyazawstrainer.com) pointing to your external ALB
 
-Application Code Modifications
-----
+# Application Code Modifications
+
 Before deployment, update these files:
 
 1. app-tier/DbConfig.js - Add RDS endpoint and credentials
 2. nginx.conf - Update proxy_pass with internal ALB DNS name
 
-   Validation Steps
-   ---
+  # Validation Steps
+   
 1.  Test database connection from App Server
 2.  Verify application health check: curl http://localhost:4000/health
 3.  Test internal ALB endpoint
