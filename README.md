@@ -1,2 +1,1 @@
-# Web Tier
-
+3-Tier Architecture Application Deployment on AWS
