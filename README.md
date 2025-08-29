@@ -9,7 +9,7 @@ Web Tier (Presentation Layer): NGINX servers
 Application Tier (Business Logic Layer): Node.js servers
 
 Database Tier (Data Layer): MySQL RDS instance
-1. VPC Setup
+#1. VPC Setup
    --
    
     Create VPC with CIDR 192.168.0.0/16
@@ -19,35 +19,35 @@ Database Tier (Data Layer): MySQL RDS instance
  - 4 Private Subnets (APP1, APP2, DB1, DB2)
  - 1 NAT Gateway
    
-2. Security Groups Configuration
-   --
+#2. Security Groups Configuration
+---
    
-Create these security groups with appropriate inbound rules:
+*  Create these security groups with appropriate inbound rules:
 
-WebALB-SG: Allow HTTP/HTTPS from anywhere (0.0.0.0/0)
+*  WebALB-SG: Allow HTTP/HTTPS from anywhere (0.0.0.0/0)
 
-Web-SG: Allow HTTP/HTTPS from WebALB-SG or VPC CIDR
+*  Web-SG: Allow HTTP/HTTPS from WebALB-SG or VPC CIDR
 
-AppALB-SG: Allow HTTP/HTTPS from Web-SG or VPC CIDR
+*  AppALB-SG: Allow HTTP/HTTPS from Web-SG or VPC CIDR
 
-App-SG: Allow custom TCP port 4000 from AppALB-SG or VPC CIDR
+*  App-SG: Allow custom TCP port 4000 from AppALB-SG or VPC CIDR
 
-Database-SG: Allow MySQL from App-SG or VPC CIDR
+*  Database-SG: Allow MySQL from App-SG or VPC CIDR
 
-3. S3 Bucket Setup
+#3. S3 Bucket Setup
    ---
    // Create private S3 bucket for application code
 aws s3 mb s3://3-tier-project-demo --region your-region
 // Upload application code
 aws s3 sync ./application-code s3://3-tier-project-demo/application-code/
 
-4. IAM Role Creation
+#4. IAM Role Creation
    ---
 Create IAM role "3-tier-role" with:
 Trusted Entity: EC2
 Permissions: AmazonEC2RoleforSSM (for SSH-less access)
 
-5. RDS MySQL Database Setup
+#5. RDS MySQL Database Setup
    ---
 * First create DB subnet group with DB1 and DB2 subnets
 * Then create RDS instance:
@@ -57,7 +57,7 @@ Permissions: AmazonEC2RoleforSSM (for SSH-less access)
 * - Security Group: Database-SG
 * - Credentials: admin/root123456
  
-6. Application Tier Deployment
+#6. Application Tier Deployment
    ---
 1.Launch EC2 instance in private subnet APP1:
 
@@ -86,7 +86,7 @@ pm2 startup
 pm2 start index.js
 pm2 startup
 
-7. Internal Load Balancer Setup
+#7. Internal Load Balancer Setup
    ---
 1.Create Target Group "App-TG":
 *  Protocol: HTTP, Port: 4000
@@ -97,7 +97,7 @@ pm2 startup
 *  Scheme: Internal
 *  Listeners: HTTP:80 → App-TG
 
-8. Web Tier Deployment
+#8. Web Tier Deployment
    ---
  1.Launch EC2 instance in public subnet:
 *  AMI: Amazon Linux 2/2023
@@ -111,7 +111,7 @@ pm2 startup
 *  sudo systemctl restart nginx
 *  sudo chkconfig nginx on
 
-  9. External Load Balancer Setup
+#  9. External Load Balancer Setup
       ---
 1.Create Target Group "Web-TG":
 *  Protocol: HTTP, Port: 80
@@ -122,12 +122,12 @@ pm2 startup
 *  Scheme: Internet-facing
 *  Listeners: HTTP:80 → Web-TG
 
-  10. HTTPS Configuration
+ # 10. HTTPS Configuration
       ---
 1.Request ACM certificate for your domain
 2.Add HTTPS listener to external ALB with ACM certificate
 
-11. Auto Scaling Setup
+ # 11. Auto Scaling Setup
     ---
 1.Create AMIs of your App and Web servers
 2.Create Launch Templates for both tiers
@@ -136,7 +136,7 @@ pm2 startup
 *  App-ASG: 2-6 instances across APP1/APP2
 *  Web-ASG: 2-6 instances across Public1/Public2
 
-  12. Route53 Configuration
+#  12. Route53 Configuration
       ---
 Create DNS record (boom.reyazawstrainer.com) pointing to your external ALB
 
