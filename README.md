@@ -154,3 +154,6 @@ Before deployment, update these files:
 3.  Test internal ALB endpoint
 4.  Verify external ALB responds correctly
 5.  Test complete flow through domain name
+
+![Home Page](3TierArch.png)
+![Result Page](output.png)
